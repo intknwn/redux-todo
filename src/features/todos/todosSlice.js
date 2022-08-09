@@ -7,6 +7,8 @@ const initialState = [
 const nextTodoId = (todos) =>
   todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1
 
+export const selectTodos = (state) => state.todos
+
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
     case 'todos/todoAdded':
