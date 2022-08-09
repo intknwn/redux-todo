@@ -1,5 +1,11 @@
+export const StatusFilters = {
+  ALL: 'all',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+}
+
 const initialState = {
-  status: 'All',
+  status: StatusFilters.ALL,
   colors: [],
 }
 
