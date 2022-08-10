@@ -1,18 +1,26 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { colors, capitalize } from '../filters/colors'
+import { selectTodoById } from './todosSlice'
 
-const TodoListItem = ({
-  todo: { text, completed, color },
-  onColorChange,
-  onCompletedChange,
-  onDelete,
-}) => {
-  const handleCompletedChanged = (e) => {
-    onCompletedChange(e.target.checked)
+const TodoListItem = ({ id }) => {
+  const todo = useSelector((state) => selectTodoById(state, id))
+  const { text, completed, color } = todo
+  const dispatch = useDispatch()
+
+  const handleCompletedChanged = () => {
+    dispatch({ type: 'todos/todoToggled', payload: todo.id })
   }
 
   const handleColorChanged = (e) => {
-    onColorChange(e.target.value)
+    dispatch({
+      type: 'todos/colorSelected',
+      payload: { id: todo.id, color: e.target.value },
+    })
+  }
+
+  const handleDelete = () => {
+    dispatch({ type: `todos/todoDeleted`, payload: todo.id })
   }
 
   return (
@@ -41,7 +49,7 @@ const TodoListItem = ({
               </option>
             ))}
           </select>
-          <button className="destroy" onClick={onDelete}>
+          <button className="destroy" onClick={handleDelete}>
             &#9587;
           </button>
         </div>

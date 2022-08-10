@@ -1,30 +1,49 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import StatusFilter from '../filters/StatusFilters'
 import ColorFilters from '../filters/ColorFilters'
 import { colors } from '../filters/colors'
-import { StatusFilters } from '../filters/filtersSlice'
+import { selectFilterStatus } from '../filters/filtersSlice'
+import { selectRemainingTodos } from '../todos/todosSlice'
 
 const Footer = () => {
-  const todosRemaining = 1
+  const dispatch = useDispatch()
+  const status = useSelector(selectFilterStatus)
+  const remainingTodos = useSelector(selectRemainingTodos)
 
   const onColorChange = (color, changeType) =>
     console.log('Color change: ', { color, changeType })
-  const onStatusChange = (status) => console.log('Status change: ', status)
+
+  const handleAllCompleted = () => {
+    dispatch({ type: 'todos/allCompleted' })
+  }
+
+  const handleClearCompleted = () => {
+    dispatch({ type: 'todos/completedCleared' })
+  }
+
+  const onStatusChange = (status) => {
+    dispatch({ type: 'filters/statusFilterChanged', payload: status })
+  }
 
   return (
     <footer className="footer">
       <div className="actions">
         <h5>Actions</h5>
-        <button className="button">Mark All Completed</button>
-        <button className="button">Clear Completed</button>
+        <button className="button" onClick={handleAllCompleted}>
+          Mark All Completed
+        </button>
+        <button className="button" onClick={handleClearCompleted}>
+          Clear Completed
+        </button>
       </div>
 
       <div className="todo-count">
         <h5>Remaining Todos</h5>
-        <strong>{todosRemaining}</strong> item{todosRemaining === 1 ? '' : 's'}{' '}
-        left
+        <strong>{remainingTodos.length}</strong> item
+        {remainingTodos.length === 1 ? '' : 's'} left
       </div>
-      <StatusFilter value={StatusFilters.All} onChange={onStatusChange} />
+      <StatusFilter value={status} onChange={onStatusChange} />
       <ColorFilters value={colors} onChange={onColorChange} />
     </footer>
   )

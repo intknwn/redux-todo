@@ -4,7 +4,10 @@ import { StatusFilters } from './filtersSlice'
 const StatusFilter = ({ value: status, onChange }) => {
   const renderedFilters = Object.keys(StatusFilters).map((key) => {
     const value = StatusFilters[key]
-    const handleClick = () => onChange(value)
+    const handleClick = () => {
+      console.log(value, status)
+      onChange(value)
+    }
     const className = value === status ? 'selected' : ''
 
     return (
