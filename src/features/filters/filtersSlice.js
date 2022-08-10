@@ -1,3 +1,5 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 export const StatusFilters = {
   ALL: 'all',
   ACTIVE: 'active',
@@ -9,44 +11,52 @@ const initialState = {
   colors: [],
 }
 
+const filtersSlice = createSlice({
+  name: 'filters',
+  initialState,
+  reducers: {
+    statusFilterChanged(state, action) {
+      return { ...state, status: action.payload }
+    },
+    colorFilterChanged: {
+      reducer(state, action) {
+        const { colors } = state
+        const { color, changeType } = action.payload
+
+        switch (changeType) {
+          case 'added': {
+            if (colors.includes(color)) {
+              return state
+            }
+
+            return {
+              ...state,
+              colors: [...colors, color],
+            }
+          }
+          case 'removed': {
+            return {
+              ...state,
+              colors: colors.filter((stateColor) => stateColor !== color),
+            }
+          }
+          default:
+            return state
+        }
+      },
+      prepare(color, changeType) {
+        return {
+          payload: { color, changeType },
+        }
+      },
+    },
+  },
+})
+
 export const selectFilterStatus = (state) => state.filters.status
 
 export const selectColors = (state) => state.filters.colors
 
-export default function filtersReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'filters/statusFilterChanged':
-      return {
-        ...state,
-        status: action.payload,
-      }
-    case 'filters/colorFilterChanged': {
-      const { colors } = state
-      const { color, changeType } = action.payload
+export const { statusFilterChanged, colorFilterChanged } = filtersSlice.actions
 
-      switch (changeType) {
-        case 'added': {
-          if (colors.includes(color)) {
-            return state
-          }
-
-          return {
-            ...state,
-            colors: [...colors, color],
-          }
-        }
-        case 'removed': {
-          return {
-            ...state,
-            colors: colors.filter((stateColor) => stateColor !== color),
-          }
-        }
-        default:
-          return state
-      }
-    }
-
-    default:
-      return state
-  }
-}
+export default filtersSlice.reducer

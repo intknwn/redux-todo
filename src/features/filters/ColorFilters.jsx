@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { colors, capitalize } from './colors'
-import { selectColors } from './filtersSlice'
+import { selectColors, colorFilterChanged } from './filtersSlice'
 
 const ColorFilters = () => {
   const dispatch = useDispatch()
@@ -10,10 +10,7 @@ const ColorFilters = () => {
     const checked = stateColors.includes(color)
     const handleColorChange = () => {
       const changeType = checked ? 'removed' : 'added'
-      dispatch({
-        type: 'filters/colorFilterChanged',
-        payload: { color, changeType },
-      })
+      dispatch(colorFilterChanged(color, changeType))
     }
 
     return (

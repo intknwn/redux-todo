@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { StatusFilters } from './filtersSlice'
-import { selectFilterStatus } from './filtersSlice'
+import { selectFilterStatus, statusFilterChanged } from './filtersSlice'
 
 const StatusFilter = () => {
   const status = useSelector(selectFilterStatus)
@@ -10,7 +10,7 @@ const StatusFilter = () => {
   const renderedFilters = Object.keys(StatusFilters).map((key) => {
     const value = StatusFilters[key]
     const handleStatusChange = () => {
-      dispatch({ type: 'filters/statusFilterChanged', payload: status })
+      dispatch(statusFilterChanged(value))
     }
     const className = value === status ? 'selected' : ''
 
