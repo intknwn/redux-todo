@@ -1,18 +1,22 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { StatusFilters } from './filtersSlice'
+import { selectFilterStatus } from './filtersSlice'
 
-const StatusFilter = ({ value: status, onChange }) => {
+const StatusFilter = () => {
+  const status = useSelector(selectFilterStatus)
+  const dispatch = useDispatch()
+
   const renderedFilters = Object.keys(StatusFilters).map((key) => {
     const value = StatusFilters[key]
-    const handleClick = () => {
-      console.log(value, status)
-      onChange(value)
+    const handleStatusChange = () => {
+      dispatch({ type: 'filters/statusFilterChanged', payload: status })
     }
     const className = value === status ? 'selected' : ''
 
     return (
       <li key={value}>
-        <button className={className} onClick={handleClick}>
+        <button className={className} onClick={handleStatusChange}>
           {key}
         </button>
       </li>

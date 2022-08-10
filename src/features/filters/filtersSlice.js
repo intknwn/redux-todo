@@ -11,6 +11,8 @@ const initialState = {
 
 export const selectFilterStatus = (state) => state.filters.status
 
+export const selectColors = (state) => state.filters.colors
+
 export default function filtersReducer(state = initialState, action) {
   switch (action.type) {
     case 'filters/statusFilterChanged':

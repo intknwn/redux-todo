@@ -1,12 +1,19 @@
 import React from 'react'
-import { capitalize } from './colors'
+import { useSelector, useDispatch } from 'react-redux'
+import { colors, capitalize } from './colors'
+import { selectColors } from './filtersSlice'
 
-const ColorFilters = ({ value: colors, onChange }) => {
+const ColorFilters = () => {
+  const dispatch = useDispatch()
+  const stateColors = useSelector(selectColors)
   const renderedColors = colors.map((color) => {
-    const checked = colors.includes(color)
-    const handleChange = () => {
+    const checked = stateColors.includes(color)
+    const handleColorChange = () => {
       const changeType = checked ? 'removed' : 'added'
-      onChange(color, changeType)
+      dispatch({
+        type: 'filters/colorFilterChanged',
+        payload: { color, changeType },
+      })
     }
 
     return (
@@ -15,7 +22,7 @@ const ColorFilters = ({ value: colors, onChange }) => {
           type="checkbox"
           name={color}
           checked={checked}
-          onChange={handleChange}
+          onChange={handleColorChange}
         />
         <span
           className="color-block"
