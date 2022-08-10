@@ -2,7 +2,11 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import StatusFilter from '../filters/StatusFilters'
 import ColorFilters from '../filters/ColorFilters'
-import { selectRemainingTodos } from '../todos/todosSlice'
+import {
+  selectRemainingTodos,
+  allCompleted,
+  completedCleared,
+} from '../todos/todosSlice'
 
 const Footer = () => {
   const dispatch = useDispatch()
@@ -10,11 +14,11 @@ const Footer = () => {
   const remainingTodos = useSelector(selectRemainingTodos)
 
   const handleAllCompleted = () => {
-    dispatch({ type: 'todos/allCompleted' })
+    dispatch(allCompleted())
   }
 
   const handleClearCompleted = () => {
-    dispatch({ type: 'todos/completedCleared' })
+    dispatch(completedCleared())
   }
 
   return (
